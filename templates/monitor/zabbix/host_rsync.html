@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+
+{% load mytags %}
+
+  {% block title %}主机同步{% endblock %}
+  {% block css %}
+    <link rel="stylesheet" href="/static/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <style>
+        *{padding:0;margin:0;}
+        ul,li{list-style: none;}
+        .ztree * {padding:0; margin:0; font-size:14px;line-height:16px;}
+        .tab_button{width:49%;float:left;}
+        .btn+.btn{margin-left:2%;}
+        .outer-box,.outer-box2{padding:10px;border:1px solid #d7d7d7;}
+        .outer-box>div:nth-of-type(2) input{width:100%;height:40px;border:1px solid #d7d7d7; padding:0px 20px;font-size: 16px;}
+        .outer-box>div:nth-of-type(2)>div>div{padding:10px 0px;}
+        .outer-box2 select{width:100%;height:34px;}
+        .outer-box2>div:nth-of-type(1){margin-bottom: 20px;}
+        .outer-box2 .label-height{height:34px;line-height: 34px;}
+        .outer-box2>div:nth-of-type(2){width:100%;border:1px solid #d7d7d7;}
+        .form-horizontal .form-group{margin-left:0px;margin-right:0px;}
+        label{margin-bottom:0px;}
+        .list li{cursor: pointer;}
+        .detail_info li{font-size: 14px; line-height: 30px;user-select: none; }
+        .detail_info li input {display: none;}
+        .detail_info li .remove-host{cursor: pointer;}
+        .host-list li{font-size: 14px; line-height: 30px; }
+        .host-list li span{user-select: none;padding: 2px;}
+        .host-list li span:hover {background: #ccc;}
+        table .tbody>tr>td{vertical-align: middle;}
+        tbody>tr>td:nth-of-type(1){white-space:nowrap; }
+        tbody>tr>td:nth-of-type(2){text-align: left;}
+
+    </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">监控管理</li>
+        <li class="active">监控配置</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">监控配置</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+                   <ul class="row">
+        <li class="col-xs-4 col-md-4">
+            <div class="outer-box">
+                <div class="text-center clearfix">
+                    <a href="javascript:;" class="btn btn-primary tab_button">业务线</a>
+                    <a href="javascript:;" class="btn btn-default tab_button">主机名</a>
+                </div>
+                <div class="tab_button_on">
+                    <div>
+                        <div>
+                            <ul id="treeDemo" class="ztree"></ul>
+                        </div>
+                    </div>
+                    <div class="ul-list" style="display:none;">
+                        <div class="text-center">
+                            <input type="text" placeholder="查询" name="" value="" class=" search-input">
+                        </div>
+                        <ul class="list list-unstyled host-list">
+                            {% for server in servers %}
+                            <li class="text-center"><span data="{{ server.id }}">{{ server.hostname }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="col-xs-8 col-md-8">
+            <div class="outer-box2">
+                <form class="form-horizontal" role="form" parsley-validate id="rsync_host_form" method="POST">
+                    <div class="form-group clearfix">
+                        <label class="label-height pull-left">zabbix group</label>
+                        <div class="col-xs-7 col-md-7" id="selectbox">
+
+                            <select  class="chosen-select chosen-transparent form-control" id="input07" parsley-trigger="change" parsley-required="true" parsley-error-container="#selectbox"  name="group">
+                                <option value="">请选择</option>
+                                {% for group in groups %}
+                                <option value="{{ group.groupid }}">{{ group.name }}</option>
+                                {% endfor  %}
+                            </select>
+                        </div>
+                        <div class="col-xs-4 col-md-4" style="width:20%;">
+                            <input type="submit" class="btn btn-primary" id="rsync_host" value="同步">
+                        </div>
+                    </div>
+                    <ul class="detail_info list-inline clearfix">
+
+                    </ul>
+
+                </form>
+
+
+            </div>
+        </li>
+    </ul>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">同步主机到zabbix</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>主机名</th>
+                            <th>信息</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tbody">
+
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <p class="text-center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+{% endblock %}
+
+<script type="text/javascript" src="/static/zTree_v3-master/js/jquery.ztree.core.js"></script>
+{% block js %}
+    var zTreeObj;
+var ary = [];
+
+var setting = {
+    callback:{
+        onClick: zTreeOnClick
+    },
+    view: {
+        fontCss : {fontSize:"16px"}
+    },
+    async:{
+        enable: true,
+        url: "{% url 'zabbix_host_async' %}",
+        type: 'get',
+        autoParam:["id"],
+        contentType: "application/json"
+    }
+};
+var zNodes = {{ ztree|safe }};
+
+
+
+function add_host(id, hostname){
+    var str = '';
+    str += '<li class="col-xs-5 col-md-5 text-center">';
+    str += '<input type="checkbox" name="server" value="'+id+'" checked />';
+    str +=  hostname + '<span class="glyphicon glyphicon-remove remove-host"></span>';
+    str += '</li>';
+
+    if(ary.indexOf(id) < 0){
+        ary.push(id);
+        $('.detail_info').append(str);
+        $(".remove-host").unbind("click",remove_host).bind('click',remove_host);
+    }
+}
+
+function remove_host(){
+    var click_obj = $(this);
+    var serverid = click_obj.siblings('input').val();
+    arr_index = ary.findIndex(function(n){
+        return n == serverid
+    });
+    if (arr_index >= 0){
+        ary.splice(arr_index, 1);
+        click_obj.unbind("click", remove_host);
+        click_obj.parent("li").remove();
+    }
+}
+
+function zTreeOnClick(event, treeId, treeNode) {
+    if(treeNode.level == 0 || treeNode.level == 1){
+        return false;
+    }
+    add_host(treeNode.id, treeNode.name);
+}
+function click_right_info(event) {
+
+    var $me = $(this);
+    var $hostid = $me.attr('data');
+    var $hostname = $me.text();
+    add_host($hostid, $hostname);
+}
+
+$(function(){
+    zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+
+    $(".chosen-select").chosen({disable_search_threshold: 8});
+    $(".tab_button").click(function () {
+        var $me = $(this);
+        $me.removeClass("btn-default").addClass("btn-primary").siblings(".tab_button").removeClass("btn-primary").addClass("btn-default");
+
+        var $parent = $me.parent().siblings(".tab_button_on");
+        $parent.children('div').hide();
+        var $index = $me.index();
+        $parent.children('div').eq($index).show();
+
+    });
+    $('.search-input').keyup(function (event) {
+        if(event.keyCode == 13){
+            var filter = $(this).val();
+            var obj = {'key':filter};
+            var $list_info =  $('.list').empty();
+            if (filter) {
+                $.ajax({
+                    url:'',
+                    method:'search',
+                    contentType :'application/json',
+                    data:obj,
+                    success:function (res) {
+                        $.each(res,function (index,obj) {
+                            var str = '<li class="text-center"><span data="'+ obj.id +'">'+ obj.hostname + '</span></li>';
+                            $list_info.append(str);
+                        });
+
+                        $('.list li span').bind('click',click_right_info);
+                    },
+                    beforeSend: function (xhr, settings) {
+                        var csrftoken = getCookie('csrftoken');
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                        }
+                    }
+                })
+
+            }
+            return false;
+        }
+    });
+
+    $('.list li span').bind('click',click_right_info);
+
+    // 同步主机到zabbix
+    $("#rsync_host").click(function(){
+        var params = $('#rsync_host_form').serialize();
+
+
+        $.ajax({
+            url:'',
+            method:'post',
+            data: params,
+            success:function (res) {
+                var tbody = $('tbody').empty();
+                $.each(res.data,function (index,obj) {
+                    var str = '';
+                    str += '<tr>';
+                    str +='<td>'+obj.hostname+'</td>';
+                    if(obj.status){
+                        str +='<td>操作成功</td>';
+                    }else{
+                        str +='<td>'+obj.errmsg+'</td>';
+                    }
+                    str += '</tr>';
+                    tbody.append(str);
+                });
+                $('#myModal').modal('show');
+                $('.detail_info').empty();
+                ary = [];
+
+            },
+            beforeSend: function (xhr, settings) {
+                var csrftoken = getCookie('csrftoken');
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                }
+            }
+        })
+        return false;
+    })
+})
+{% endblock %}
+

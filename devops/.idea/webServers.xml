@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="a0cc3fbf-778e-4d62-94ab-038ea5b6ad73" name="devops7" url="http://172.81.238.170">
+        <fileTransfer host="172.81.238.170" port="22021" privateKey="C:\Users\dengh\Desktop\工作文件\login-key\denghonglin" rootFolder="/home/denghonglin/demo/devops" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22021" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

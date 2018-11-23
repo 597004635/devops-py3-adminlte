@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+
+
+  {% block title %}作者管理{% endblock %}
+  {% block css %}
+  <style>
+    .form-horizontal .form-group{margin-bottom:10px;width:100%;}
+    .form-horizontal  .form-control{width:86%;}
+    .form-horizontal .control-label{width:75px;}
+  </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">图书管理系统</li>
+        <li class="active">作者管理</li>
+        <li class="active">作者列表</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+
+        {% include "books/authoraddmodel.html" %}
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">作者列表</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+
+             <div style="margin-bottom: 10px;height: 30px" class="row">
+                <a style="float: left; margin-left: 1%" class="btn btn-sm btn-primary" id="addbtn">
+                    <span class="glyphicon glyphicon-plus"></span> 添加作者
+                </a>
+                <form style="float: right;width: 20%;margin-right: 1%">
+                <div  class="input-group">
+               
+                    <input type="text" class="form-control" name="keyword" placeholder="姓名|邮箱|地址" value="{% if keyword %} {{ keyword }} {% endif %}">
+                    <div class="input-group-btn">
+                       <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                           <span class="glyphicon glyphicon-search"></span>搜索
+                       </button>
+                    </div>
+                </div>
+                </form>
+             </div>
+
+
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped footable toggle-arrow-tiny" data-page-navigation=".paginations">
+                <thead>
+                <tr>
+                    <th class="text-center">姓名</th>
+                    <th class="text-center">书</th>
+                     <th class="text-center">邮箱</th>
+                    <th class="text-center">电话</th>
+                    <th class="text-center">地址</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                  {% for author in author_list %}
+                    <tr>
+                        <td class="text-center"> <a href="{% url 'books:author_detail'  author.id %}">{{ author.name }}</a> </td>
+                        <td class="text-center">
+                            {% for book in author.book_set.all %}
+                             < {{ book.name }}>
+                            {% endfor %}
+                        </td>
+                        <td class="text-center"> {{ author.email |default:'空' }}</td>
+                        <td class="text-center"> {{ author.phone |default:'空'}}</td>
+                        <td class="text-center"> {{ author.address |default:'空' }}</td>
+                        <td class="text-center">
+                            <a href="{% url 'books:author_detail'  author.id %}" class="btn btn-xs btn-info update"><span class="glyphicon glyphicon-edit"></span></a>
+{#                        <a type="button" class="btn btn-info btn-xs"  href="{% url 'books:publish_detail'  publish.id %}" >修改</a>#}
+{#                            <button id="delete_button" class="btn btn-danger">删除</button>#}
+                             <a  class="btn btn-xs btn-danger del"  uname="{{ author.name }}" data-id="{{ author.id }}"><span class="glyphicon glyphicon-trash"></span></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div><!-- /.table-responsive -->
+
+            <div class="row">
+              <div class="col-sm-6">
+                <!--
+                 <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                    显示 [{{ paginator.count }}] 条数据中的 第 [{{ page_obj.start_index}}] 至 [{{ page_obj.end_index }}] 的数据 
+                 </div>
+                -->
+                显示第{{ page_obj.start_index}} - {{ page_obj.end_index }} 条数据,总共 {{ paginator.count }} 条数据. 
+              </div>
+              {% include 'paginator.html' %}
+            </div><!-- /.paginator -->
+
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+{% endblock %}
+
+{% block js %}
+    /*添加作者模态窗弹出*/
+$("#addbtn").click(function(){
+    $("#author_add_modal").modal("show");
+});
+
+/*添加出版商*/
+$("#submit_button").click(function(){
+    var formdata = $('#AddForm').serialize()
+    console.log(formdata)
+    $.post('', formdata, function(res){
+        console.log(res)
+        if (res.code == 0) {
+            swal({
+                "title": "添加成功",
+                 "text": res.result,
+                 "type": "success"
+            }, function () {
+                 setTimeout(function () {
+                    window.location.reload();
+                 }, 50);
+             })
+        } else {
+            swal("操作失败", res.errmsg, "error");
+         }
+    })
+    return false;
+})
+
+    /*删除*/
+$("tbody").on('click','.del',function(){
+   /* if(confirm("是否确认删除？")){ */
+        var that = this;
+        var id = $(this).attr('data-id')
+        console.log(id)
+        var uname = $(this).attr('uname')
+        if(confirm("确认删除作者: "+uname+" ?")){
+        $.ajax({
+            url:"",
+            type: "DELETE",
+            data: {"id":id},
+            datatype: "json",
+            success: function(res){
+                console.log(res)
+                if (res.code ==0){
+                    swal("Good!", res.result, "success")
+                    window.location.reload();
+                }else{
+                    swal("操作失败", res.errmsg, "error")
+                }
+            }
+        })
+
+    }  // end confirm
+     return false
+})
+
+{% endblock %}
+

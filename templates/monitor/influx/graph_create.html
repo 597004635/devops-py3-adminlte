@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+
+  {% block title %}创建图形{% endblock %}
+  {% block css %}
+  <style>
+    .form-horizontal .form-group{margin-bottom:10px;width:100%;}
+    .form-horizontal  .form-control{width:86%;}
+    .form-horizontal .control-label{width:75px;}
+  </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">监控展示</li>
+        <li class="active">创建图形</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+
+        {% include "books/bookaddmodel.html" %}
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">图形列表</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+                    <form class="form-horizontal" role="form" parsley-validate id="vmform" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="col-sm-2 control-label">标题 *</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="title" autocomplete="off"  parsley-trigger="change" parsley-required="true" parsley-minlength="4" parsley-validation-minlength="1">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">子标题 *</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="subtitle" autocomplete="off"  >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">数据点单位 *</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="unit" autocomplete="off"  parsley-trigger="change" parsley-required="true" parsley-minlength="1" parsley-validation-minlength="1">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">measurement *</label>
+            <div class="col-sm-8" id="measurement">
+                <select class="chosen-select chosen-transparent form-control" name="measurement" id="select_measurement" parsley-trigger="change" parsley-required="true" parsley-error-container="#measurement">
+                    <option value="0">请选择measurement</option>
+                    {% for measurement in measurements %}
+                        <option value="{{ measurement }}">{{ measurement }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="select_status" class="col-sm-2 control-label">是否动态主机名 *</label>
+            <div class="col-sm-8" id="idc">
+                <label class="radio-inline">
+                    <input type="radio" name="auto_hostname" checked value="1">使用
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="auto_hostname"  value="0">不使用
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">字段过滤</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="field_expression" id="field_expression" autocomplete="off">
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">格式化tooltip_formatter：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="tooltip_formatter" autocomplete="off">
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-2 control-label">格式化Y轴：</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="yaxis_formatter" autocomplete="off">
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group form-footer">
+            <div class="col-sm-offset-4 col-sm-8">
+                <button type="submit" class="btn btn-primary" id="submit_button">提交</button>
+                <button type="reset" class="btn btn-default">重置</button>
+                <button type="button" class="btn btn-success" id="check_btn">检查</button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <ul class="list-unstyled" id="result_list">
+
+        </ul>
+    </div>
+
+
+
+
+
+
+
+
+
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+{% endblock %}
+
+{% block js %}
+    $(function(){
+        $(".chosen-select").chosen({disable_search_threshold: 10});
+    })
+
+{% endblock %}
+

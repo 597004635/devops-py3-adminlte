@@ -1,0 +1,61 @@
+<!--添加用户模态窗 -->
+
+<div class="modal fade" tabindex="-1"  id="user_add_modal">
+  <div class="modal-dialog" style="width:40%">
+    <div class="modal-content">
+
+
+         <div class="modal-header" style="background:cornflowerblue; color:white">
+              <i class="fa fa-info-circle"></i>
+             <span style="font-weight:bold">添加用户</span>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times</span></button>
+        </div>
+
+        <div class="modal-body" style="text-align:center">
+             <form  class="form-horizontal" id = "AddForm">
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label"  style="width:100px; height:50px"><span style="color:red; margin-right:10px">*</span>用户名</label>
+                    <div class="col-sm-8">
+                          <input name="username" type="text" class="form-control" placeholder="账号"/>
+                      </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"  style="width:100px; height:50px"><span style="color:red; margin-right:10px">*</span>中文名</label>
+                     <div class="col-sm-8">
+                          <input name="name_cn" type="text" class="form-control" placeholder="中文名"/>
+                      </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" style="width:100px; height:50px"><span style="color:red; margin-right:10px">*</span>密码</label>
+                     <div class="col-sm-8">
+                          <input name="password" type="password" class="form-control" placeholder="密码"/>
+                      </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" style="width:100px; height:50px"><span style="color:red; margin-right:10px">*</span>手机</label>
+                     <div class="col-sm-8">
+                          <input name="" type="" class="form-control" placeholder="手机"/>
+                      </div>
+                </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-4 control-label"  style="width:100px; height:50px"><span style="color:red; margin-right:10px">*</span>邮箱</label>
+                     <div class="col-sm-8">
+                          <input name="email" type="email" class="form-control" placeholder="邮箱"/>
+                      </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="submit_button">确认</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+             </form>
+
+         </div>
+    </div>
+</div>
+</div>
+<!--添加用户模态窗结束 -->

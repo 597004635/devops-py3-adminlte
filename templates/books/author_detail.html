@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+
+  {% block title %}作者信息{% endblock %}
+  {% block css %}
+  <style>
+{#    .form-horizontal .form-group{margin-bottom:10px;width:100%;}#}
+{#    .form-horizontal  .form-control{width:86%;}#}
+{#    .form-horizontal .control-label{width:75px;}#}
+  </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">图书管理系统</li>
+        <li class="active">作者信息</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">作者信息</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+                <form method="post"  class="form-horizontal">
+                    <div class="form-group"><label class="col-sm-2 control-label">作者：</label>
+                        <div class="col-sm-8">
+			                <input type="text" name="name" value="{{author.name}}" class="form-control" required="">
+                       </div>
+                    </div>
+
+                    <div class="form-group"><label class="col-sm-2 control-label">邮箱：</label>
+                        <div class="col-sm-8">
+			                <input type="text" name="email" value="{{author.email}}" class="form-control" required="">
+                       </div>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group"><label class="col-sm-2 control-label">电话：</label>
+                       <div class="col-sm-8">
+			   <input type="text" name="phone" value="{{author.phone}}" class="form-control" required="">
+                       </div>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group"><label class="col-sm-2 control-label">地址：</label>
+                       <div class="col-sm-8">
+			   <input type="text" name="address" value="{{author.address}}" class="form-control" required="">
+                       </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <a class="btn btn-default" href="{% url 'books:author_list' %}">返回</a>
+                            <button id="submit_button" class="btn btn-primary" type="submit">更新</button>
+                        </div>
+                    </div>
+             </form>
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+

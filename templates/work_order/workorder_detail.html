@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% load mytags %}
+
+  {% block title %}工单详情{% endblock %}
+  {% block css %}
+  <style>
+    .form-horizontal .form-group{margin-bottom:10px;width:100%;}
+    .form-horizontal  .form-control{width:86%;}
+    .form-horizontal .control-label{width:75px;}
+  </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">工单系统</li>
+        <li class="active">工单详情</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">工单详情</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+        <div class="box-body">
+            <form method="post" action="" class="form-horizontal">
+                {% if msg %}
+                    <div class="alert alert-success alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">x</button>
+                        {{ msg | safe }}
+                    </div>
+                {% elif errmsg %}
+                    <div class="alert alert-dange alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">x</button>
+                        {{ errmsg | safe }}
+                    </div>
+                {% endif %}
+
+                <input type="hidden" name="id" value="{{ work_order.id }}">
+                <input type="hidden" name="status" value="{{ work_order.status }}">
+                <pre>{{ work_order.order_contents }}</pre>
+                <div class="hr-line-dashed"></div>
+
+                {% if work_order.status == 1 %}
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <textarea name="result_desc" class="form-control" rows="5" placeholder="处理结果"></textarea>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                {% endif %}
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        {% if work_order.status == 0 %}
+                            <button id="submit_button" class="btn btn-primary" type="submit">接受</button>
+                        {% elif work_order.status == 1 %}
+                            <button id="submit_button" class="btn btn-primary" type="submit">完成</button>
+                        {% endif %}
+{#                        <button class="btn btn-white" type="reset" href="{% url 'work_order:list' %}">取消</button>#}
+                        <a class="btn btn-warning" href="{% url 'work_order:list' %}">返回</a>
+                    </div>
+                </div>
+
+            </form>
+            <div class="row">
+              <div class="col-sm-6">
+                <!--
+                 <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                    显示 [{{ paginator.count }}] 条数据中的 第 [{{ page_obj.start_index}}] 至 [{{ page_obj.end_index }}] 的数据 
+                 </div>
+                -->
+                显示第{{ page_obj.start_index}} - {{ page_obj.end_index }} 条数据,总共 {{ paginator.count }} 条数据. 
+              </div>
+              {% include 'paginator.html' %}
+            </div><!-- /.paginator -->
+
+        </div>
+            <!-- /.box-body -->
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+{% endblock %}
+
+{% block js %}
+
+/*删除*/
+$("tbody").on('click','.del',function(){
+   /* if(confirm("是否确认删除？")){ */
+        var that = this;
+        var id = $(this).attr('data-id')
+        var uname = $(this).attr('uname')
+        if(confirm("确认删除IDC: "+uname+" ?")){
+        $.ajax({
+            url:"",
+            type: "DELETE",
+            data: {"id":id},
+            datatype: "json",
+            success: function(res){
+                console.log(res)
+                if (res.code ==0){
+                    swal("Good!", res.result, "success")
+                    window.location.reload();
+                }else{
+                    swal("操作失败", res.errmsg, "error")
+                }
+            }
+        })
+
+    }  // end confirm
+     return false
+})
+{% endblock %}
+

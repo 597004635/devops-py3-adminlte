@@ -1,0 +1,1 @@
+insert into resources_server(hostname,inner_ip,out_ip,server_conf,remark,service_id,server_purpose,create_date,idc_id,status_id) values('ryzg-test-1','10.10.21.74','103.75.18.4','2核4G 100G硬盘 10M带宽','测试机','4','5','2018-01-23','5','3');

@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% load mytags %}
+
+  {% block title %}首页{% endblock %}
+  {% block css %}
+  <style>
+    .form-horizontal .form-group{margin-bottom:10px;width:100%;}
+    .form-horizontal  .form-control{width:86%;}
+    .form-horizontal .control-label{width:75px;}
+  </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">用户管理</li>
+        <li class="active">用户列表</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+
+
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+
+        {% include "dashboard/user/useraddmodel.html" %}
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">用户列表</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+
+             <div style="margin-bottom: 10px;height: 30px" class="row">
+                <a style="float: left; margin-left: 1%" class="btn btn-sm btn-primary" id = "addbtn"> 
+                    <span class="glyphicon glyphicon-plus"></span>添加用户 
+                </a>
+                <form style="float: right;width: 20%;margin-right: 1%">
+                <div  class="input-group">
+                    <input type="text" class="form-control" name="keyword"
+                         placeholder="用户名|姓名" value="{% if keyword %} {{ keyword }} {% endif %}">
+                    <div class="input-group-btn">
+                       <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                           <span class="glyphicon glyphicon-search"></span>搜索
+                       </button>
+                    </div>
+                </div>
+                </form>
+             </div>
+
+
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th class="text-center">用户名</th>
+                    <th class="text-center">姓名</th>
+                    <th class="text-center">小组</th>
+                    <th class="text-center">手机</th>
+                    <th class="text-center">邮箱</th>
+                    <th class="text-center">状态</th>
+                   <!--  <th class="text-center">创建时间</th> -->
+                    <th class="text-center">最后登录时间</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                 {% for user in userlist %}
+                   <tr class="gradeX">
+                      <td class="text-center"><a href="{% url 'dashboard:user_detail' user.id %}">{{ user.username }}</a> </td>
+                      <td class="text-center"> {{ user.name_cn }} </td>
+                      <td class="text-center"> {{ user.groups.all | group_str2 |default:"无"}} </td>
+                      <td class="text-center">{{ user.phone | default_if_none:'' }}</td>
+                      <td class="text-center">{{ user.email | default_if_none:'' }}</td>
+                    <!--  <td class="text-center">{{ user.is_active | bool2str }}</td> -->
+                      <td class="status">
+                        {% if user.is_active %}
+                            <span class="glyphicon glyphicon-ok-circle text-succes"></span>正常
+                        {% else %}
+                            <span class="glyphicon glyphicon-warning-sign text-warning"></span>禁止
+                        {% endif %}
+                      </td>
+
+                      <!-- <td class="text-center">{{ user.date_joined }}</td> -->
+                      <td class="text-center">{{ user.last_login | default_if_none:'未登录'}}</td>
+
+                      <td class="text-center">
+                        <div class="btn-group">
+                         <button class="btn btn-primary btn-xs dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">修改<span class="caret"></span></button>
+                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                             href="{% url 'dashboard:modify_pwd' %}?uid={{ user.id }}">修改密码</a>
+                            </li>
+
+                    
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                              href="{% url 'dashboard:user_group_power' user.id  %}"  class="user_group">角色权限修改</a>
+                            </li>
+                          </ul>
+                        </div>
+
+                            {% if user.is_active %}
+                                <button type="button" class="btn btn-xs btn-warning modify_user_status" status={{ user.is_active|lower  }} data="{{ user.id }}">禁用</button>
+                            {% else %}
+                                <button type="button" class="btn btn-info btn-xs modify_user_status" status={{ user.is_active|lower }} data="{{ user.id }}">开启</button>
+                            {% endif %}
+
+                        <a class="btn btn-xs btn-danger del" uname="{{ user.username }}" data-id="{{ user.id }}" {% if user.username == 'admin' %} disabled {% endif %}>删除</a>
+                       </td>
+                   </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div><!-- /.table-responsive -->
+
+            <div class="row">
+              <div class="col-sm-6">
+                    显示第{{ page_obj.start_index}} - {{ page_obj.end_index }} 条数据,总共 {{ paginator.count }} 条数据. 
+              </div>
+              {% include 'paginator.html' %}
+            </div><!-- /.paginator -->
+
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+{% endblock %}
+
+{% block js %}
+
+/*添加用户模态窗弹出*/
+$("#addbtn").click(function(){
+    $("#user_add_modal").modal("show"); 
+});
+
+/*添加用户*/
+$("#submit_button").click(function(){
+    var formdata = $('#AddForm').serialize()
+    console.log(formdata)
+    $.post('', formdata, function(res){
+        if (res.code == 0) {
+			swal("Good!", "用户添加成功", "success")
+            window.location.reload();
+		/*
+            swal({ 
+                "title": "添加成功",
+                 "text": res.result,
+                 "type": "success"
+            }, function () {
+                 setTimeout(function () {
+                    window.location.reload();
+                 }, 50);
+             })
+		*/
+        } else {
+            swal("操作失败", res.errmsg, "error");
+         }
+    })
+    return false;
+})
+
+/*删除用户*/
+$("tbody").on('click','.del',function(){
+   /* if(confirm("是否确认删除？")){ */
+        var that = this;
+        var id = $(this).attr('data-id')
+        var uname = $(this).attr('uname')
+        if(confirm("确认删除帐号: "+uname+" ?")){
+        $.ajax({
+            url:"",
+            type: "DELETE",
+            data: {"id":id},
+            datatype: "json",
+            success: function(res){
+                console.log(res)
+                if (res.code ==0){
+                    swal("Good!", res.result, "success")
+                    window.location.reload();
+                }else{
+                    swal("操作失败", res.errmsg, "error")
+                }
+            }
+        })
+
+    }  // end confirm
+     return false
+})
+
+/* 修改用户状态（正常/禁用）*/
+function change_user_status(status_td_obj, status){
+    if (status == "true"){
+        status_td_obj.html('<span class="glyphicon glyphicon-warning-sign text-warning"></span>禁止')
+    }else{
+        status_td_obj.html('<span class="glyphicon glyphicon-ok-circle text-success"></span>正常')
+    }
+}
+
+$(function(){
+    $(".modify_user_status").click(function(){
+        var click_obj = $(this);
+        var uid = click_obj.attr('data');
+        var status = click_obj.attr('status');
+        
+        $.ajax({
+            url: "{% url 'dashboard:user_modify_status' %}",
+            type: "POST",
+            data: {"uid": uid},
+            success: function (res) {
+                if (res.status != 0){
+                    swal("操作失败", res.errmsg, "error")
+                }else{
+                    if (status == "true"){
+                        click_obj.attr("status", "false").text("开启");
+                        click_obj.removeClass("btn-warning").addClass("btn-info");
+                    }else{
+                        click_obj.attr("status", "true").text("禁用");
+                        click_obj.removeClass("btn-info").addClass("btn-warning");
+
+                    }
+                }
+                status_obj = click_obj.parents('td').siblings('.status');
+                change_user_status(status_obj, status)
+            },
+            /*
+            beforeSend: function (xhr, settings) {
+                var csrftoken = getCookie('csrftoken');
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken)
+                }
+            }
+            */
+        });
+        /*return false*/
+    });
+
+})
+
+
+
+{% endblock %}
+

@@ -1,0 +1,8 @@
+---                                                                                                                                                                            
+- hosts: test 
+  become_user: root
+  gather_facts: no
+  tasks:
+  - name: touch api.txt
+    file: path=/tmp/api.txt state=touch  mode=0777
+  

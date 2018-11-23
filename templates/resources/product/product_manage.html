@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% load mytags %}
+
+  {% block title %}业务线管理{% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">资源管理</li>
+        <li class="active">业务线管理</li>
+      </ol>
+  {% endblock %}
+
+  {% block css %}
+     <link rel="stylesheet" href="/static/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" type="text/css">
+
+{#      <style>#}
+{#        .ztree * {padding:0; margin:0; font-size:14px;line-height:16px;}#}
+{#        #product_info{padding-bottom: 25px;}#}
+{#        #modify{width:100%;height:100%;display: none}#}
+{#        .controls{display: none;}#}
+{#        #infomatioin{width:100%;height: 100%;}#}
+{#        #infomatioin ul li{line-height: 45px;font-size: 16px;}#}
+{#        #infomatioin ul li label{display: inline-block;width:100px;text-align: right;font-weight: bold;margin-right:25px;}#}
+{#        #infomatioin ul li button{margin-left:125px;}#}
+{#        #hostlist{display: none;border-top: 1px solid rgba(255, 255, 255, 0.3);padding-top:10px;}#}
+{#        #hostlist li{margin-right:10px;min-width:200px;}#}
+{#        .header-btn{margin-left: 20px;}#}
+{#       </style>#}
+
+  {% endblock %}
+
+
+{% block content %}
+
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">业务线管理</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div style="margin-bottom: 10px;height: 30px" class="row">
+                <a href="{% url 'resources:product_add' %}" style="float: left; margin-left: 1%" class="btn btn-sm btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span> 添加业务线
+                </a>
+              </div>
+
+	            <!-- 树形目录  -->
+              <div class="row">
+                  <div class="col-xs-3">
+                    <ul id="ztree" class="ztree"></ul>
+                  </div>
+
+                  <div class="col-xs-9">
+                     <div class="row1" id="product_info">
+		                <div id="infomatioin">
+		                    <ul class="list-unstyled">
+                                <li><label>分类名：</label><span id="info_service_name"></span></li>
+                                <li><label>上级分类：</label><span id="info_pid"></span></li>
+                                <li><label>字母简称：</label><span id="info_module_letter"></span></li>
+                                <li><label>业务负责人：</label><span id="info_dev_interface"></span></li>
+                                <li><label>运维负责人：</label><span id="info_op_interface"></span></li>
+                                <li><button class="btn btn-primary" id="info_modify_btn">修改</button></li>
+                            </ul>
+		                </div>
+                        <div class="clear"></div>
+                     </div>
+                  </div>
+               </div>
+
+             </div>
+
+          </div>
+            <!-- /.box-body -->
+        </div>
+          <!-- /.box -->
+      </div>
+      <!-- /.row -->
+
+         <!--Table-->
+
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">产品线所用资源</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                    <th>云商</th>
+                    <th>主机名</th>
+                    <th>内网IP</th>
+                    <th>外网IP</th>
+                    <th>配置</th>
+                    <th>状态</th>
+                    <th>备注</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for host in host_list %}
+                  <tr>
+                    <td >{{ host.idc.idc_name }}</td>
+                    <td>{{ host.hostname }}</td>
+                    <td>{{ host.cpu }}</td>
+                    <td>{{ host.memory }}</td>
+                    <td>{{ host.private_ip }}</td>
+                    <td>{{ host.expired_time }}</td>
+                  </tr>
+                 {% endfor %}
+
+
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+
+{% endblock %}
+
+
+{#<script type="text/javascript" src="/static/zTree_v3-master/js/jquery.ztree.core.js"></script>#}
+{% block js %}
+    var zTreeObj;
+var setting = {
+    data : {
+            simpleData : {
+                enable : true,//是否之用简单数据
+                idKey : 'id', //对应json数据中的ID
+                pIdKey : 'parentId' //对应json数据中的父ID
+            },
+        },
+
+
+    };
+
+
+var zNodes = {{ ztree|safe }};
+
+
+$(document).ready(function(){
+    zTreeObj = $.fn.zTree.init($("#ztree"), setting, zNodes);
+})
+
+
+ {% if  product.pid %}
+    $("#pid").select2().val({{ product.pid.id|default:"[]"}}).trigger("change")
+ {% endif %}
+
+$("#dev_interface").select2().val( {{ dev_list |safe}} ).trigger("change")
+$("#op_interface").select2().val( {{ op_list |safe}} ).trigger("change")
+
+
+{##}
+{#        var data;#}
+{#        var hostlist = $("#hostlist");#}
+{#        var users = false;#}
+{#        var infomatioin_div = $("#infomatioin");#}
+{#        var info_service_name = $("#info_service_name");#}
+{#        var info_pid = $("#info_pid");#}
+{#        var info_module_letter = $("#info_module_letter");#}
+{#        var info_dev_interface = $("#info_dev_interface");#}
+{#        var info_op_interface = $("#info_op_interface");#}
+{#        var info_modify_btn = $("#info_modify_btn");#}
+{##}
+{#        var modify_div = $("#modify");#}
+{#        var input_service_name = $("#input_service_name");#}
+{#        var input_pid = $("#input_pid");#}
+{#        var input_module_letter = $("#input_module_letter");#}
+{#        var input_dev_interface = $("#input_dev_interface");#}
+{#        var input_op_interface = $("#input_op_interface");#}
+{##}
+{#        var return_info_btn = $("#return_info");#}
+{#        var submit_modify = $("#submit_modify");#}
+{#        var products = false;#}
+{#        var id ;#}
+{##}
+{#        function show_product_info(){#}
+{#            infomatioin_div.hide();#}
+{#            modify_div.hide();#}
+{#            $.get("{% url 'resources:product_get' %}", {"id": id}, function(res){#}
+{#                if(res.status == 0){#}
+{#                    data = res.data;#}
+{#                    infomatioin_div.fadeIn("fast");#}
+{##}
+{#                    info_service_name.text(data.service_name);#}
+{#                    info_pid.text(data.pid);#}
+{#                    info_module_letter.text(data.module_letter);#}
+{#                    info_dev_interface.text(data.dev_interface);#}
+{#                    info_op_interface.text(data.op_interface);#}
+{#                }else{#}
+{#                    swal('错误',res.errmsg,"error");#}
+{#                }#}
+{##}
+{#            });#}
+{#        }#}
+{##}
+{##}
+{#	var zTreeObj;#}
+{#	$(function(){#}
+{#	  zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes)#}
+{#    }#}
+
+{% endblock %}
+

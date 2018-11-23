@@ -1,0 +1,9 @@
+ansible==1.9.6
+Django==1.11.8
+django-pure-pagination
+PyMySQL==0.9.2
+django-celery==3.2.2
+redis==2.10.6
+celery-with-redis==3.0 
+python-gitlab
+requests

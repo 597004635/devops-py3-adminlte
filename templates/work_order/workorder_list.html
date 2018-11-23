@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+  {% block title %}工单列表{% endblock %}
+  {% block css %}
+  <style>
+    .form-horizontal .form-group{margin-bottom:10px;width:100%;}
+    .form-horizontal  .form-control{width:86%;}
+    .form-horizontal .control-label{width:75px;}
+  </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">工单系统</li>
+        <li class="active">工单列表</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">工单列表</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+
+             <div style="margin-bottom: 10px;height: 30px" class="row">
+                <form style="float: right;width: 20%;margin-right: 1%">
+                <div  class="input-group">
+                    <input type="text" class="form-control" name="keyword" placeholder="标题|内容|结果" value="{% if keyword %} {{ keyword }} {% endif %}">
+                    <div class="input-group-btn">
+                       <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                           <span class="glyphicon glyphicon-search"></span>搜索
+                       </button>
+                    </div>
+                </div>
+                </form>
+             </div>
+
+
+            <div class="table-responsive">
+{#            <table class="table table-bordered table-striped">  不隐藏详情#}
+            <table class="table table-bordered table-striped footable toggle-arrow-tiny" data-page-navigation=".paginations">
+                <thead>
+                <tr>
+                    <th class="text-center" data-toggle="true">工单类型</th>
+                    <th class="text-center">工单标题</th>
+                    <th class="text-center">申请人</th>
+                    <th class="text-center">指派给</th>
+                    <th class="text-center">工单状态</th>
+                    <th class="text-center">申请时间</th>
+                    <th class="text-center">操作</th>
+                    <th class="text-center" data-hide="all">详情</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                 {% for order in orderlist %}
+                   <tr class="gradeX">
+                      <td class="text-center">{{ order.get_type_display }}</td>
+                      <td class="text-center">{{ order.title }}</td>
+                      <td class="text-center">{{ order.applicant.name_cn }} </td>
+                      <td class="text-center">{{ order.assign_to.name_cn }}</td>
+                      <td class="text-center"><span class="label {% if order.status == 0 %}label-success{% elif order.status == 1 %}label-warning{% endif %}">{{ order.get_status_display }}</span></td>
+                      <td class="text-center">{{ order.apply_time }}</td>
+                      <td class="text-center">
+                          {% if request.user.id == order.assign_to_id or request.user.is_authenticated %}
+                             <a href="{% url 'work_order:detail' order.id %}" class="btn btn-xs btn-info">去处理</a>
+                          {% endif %}
+                          {% if request.user.id == order.applicant_id  %}
+                            <button data-id="{{ order.id }}" class="btn btn-xs btn-danger delete" {% if order.status == 1 %}disabled{% endif %}>取消</button>
+                          {% endif %}
+                      </td>
+{#                      <td class="text-center">#}
+{#                        <a href="{% url 'resources:idc_edit' idc.id %}" class="btn btn-xs btn-info update"><span class="glyphicon glyphicon-edit"></span></a>#}
+{#                        <a class="btn btn-xs btn-danger del" uname="{{ idc.idc_name }}" data-id="{{ idc.id }}"><span class="glyphicon glyphicon-trash"></a>#}
+{#                       </td>#}
+                       <td class="text-center"><pre>{{ order.order_contents }}</pre></td>
+                   </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div><!-- /.table-responsive -->
+
+            <div class="row">
+              <div class="col-sm-6">
+                <!--
+                 <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                    显示 [{{ paginator.count }}] 条数据中的 第 [{{ page_obj.start_index}}] 至 [{{ page_obj.end_index }}] 的数据 
+                 </div>
+                -->
+                显示第{{ page_obj.start_index}} - {{ page_obj.end_index }} 条数据,总共 {{ paginator.count }} 条数据. 
+              </div>
+              {% include 'paginator.html' %}
+            </div><!-- /.paginator -->
+
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+{% endblock %}
+
+{% block js %}
+    $(document).ready(function() {
+        $('.footable').footable();
+    });
+
+   $("tbody").on('click','.delete',function(){
+    var work_order_id = $(this).attr('data-id');
+        $.ajax({
+            type: "DELETE",
+            url: "",     //{#% url 'work_order:list' %#}
+            data:{"id": work_order_id},
+            success: function(data){
+                console.log(data);
+                if (data['code']== 0){
+                        swal({
+                            title: "Sucess",
+                            text: "本条工单已经取消！",
+                            type: "success",
+                            confirmButtonText: "确定"
+                        }, function () {
+                             location.reload()
+                        });
+               }else{
+                        swal("Error", data['errmsg'], "error")
+               }
+         }
+        });
+})
+
+{% endblock %}
+

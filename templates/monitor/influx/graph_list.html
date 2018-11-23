@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+
+  {% block title %}图形列表{% endblock %}
+  {% block css %}
+  <style>
+    .form-horizontal .form-group{margin-bottom:10px;width:100%;}
+    .form-horizontal  .form-control{width:86%;}
+    .form-horizontal .control-label{width:75px;}
+  </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">监控展示</li>
+        <li class="active">图形列表</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+
+        {% include "books/bookaddmodel.html" %}
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">图形列表</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+
+             <div style="margin-bottom: 10px;height: 30px" class="row">
+                <a style="float: left; margin-left: 1%" class="btn btn-sm btn-primary" href="{#% url 'monitor:influx_graph_create' %#}">
+                    <span class="glyphicon glyphicon-plus"></span> 创建图形
+                </a>
+             </div>
+
+                    <div class="tile-body color transparent-black rounded-corners">
+
+        <div class="table-responsive">
+            <table  class="table table-datatable table-custom" id="basicDataTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th class="">标题</th>
+                        <th class="">子标题</th>
+                        <th class="">单位</th>
+                        <th class="">measurement</th>
+                        <th class="">自动主机名</th>
+                        <th class="">field_expression</th>
+                        <th class="">操作</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+
+                    {% for graph in object_list %}
+                        <tr class="gradeA">
+                            <td> {{ forloop.counter }} </td>
+                            <td> {{ graph.title }} </td>
+                            <td> {{ graph.subtitle }} </td>
+                            <td> {{ graph.unit }} </td>
+                            <td> {{ graph.measurement }} </td>
+                            <td>
+                                {% if graph.auto_hostname %}
+                                    是
+                                {% else %}
+                                    否
+                                {% endif %}
+                            </td>
+                            <td> {{ graph.field_expression }} </td>
+                            <td>
+                                <button type="button" class="btn btn-success btn-sm">详情</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- /tile body -->
+
+             <div class="tile-footer text-center">
+
+        <ul class="pagination pagination-sm nomargin pagination-custom">
+            {% if page_obj.has_previous %}
+                <li>
+                    <a href="?page={{ page_obj.previous_page_number }}{{ uri }}"><i class="fa fa-angle-double-left"></i></a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <a href="#"><i class="fa fa-angle-double-left"></i></a>
+                </li>
+            {% endif %}
+
+            {% for page in paginator.page_range %}
+                <li {% if page_obj.number == page %}class="active"{% endif %}><a href="?page={{ page }}{{ uri }}" >{{ page }}</a></li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li>
+                    <a href="?page={{ page_obj.next_page_number }}{{ uri }}"><i class="fa fa-angle-double-right"></i></a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                <a href="#"><i class="fa fa-angle-double-right"></i></a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+{% endblock %}
+
+{% block js %}
+    $(function(){
+        $(".chosen-select").chosen({disable_search_threshold: 10});
+    })
+
+{% endblock %}
+

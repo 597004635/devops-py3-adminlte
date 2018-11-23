@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{#{% load producttags %}#}
+
+  {% block title %}首页{% endblock %}
+  {% block css %}
+  <style>
+    .form-horizontal .form-group{margin-bottom:10px;width:100%;}
+    .form-horizontal  .form-control{width:86%;}
+    .form-horizontal .control-label{width:75px;}
+  </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">资源管理</li>
+        <li class="active">主机管理</li>
+        <li class="active">主机列表</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">主机列表</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+
+             <div style="margin-bottom: 10px;height: 30px" class="row">
+                <a href="{% url 'resources:server_add' %}" style="float: left; margin-left: 1%" class="btn btn-sm btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span> 主机添加
+                </a>
+                <form style="float: right;width: 20%;margin-right: 1%">
+                <div  class="input-group">
+               
+                    <input type="text" class="form-control" name="keyword" placeholder="ip或主机名" value="{% if keyword %} {{ keyword }} {% endif %}">
+                    <div class="input-group-btn">
+                       <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                           <span class="glyphicon glyphicon-search"></span>搜索
+                       </button>
+                    </div>
+                </div>
+                </form>
+             </div>
+
+
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th class="text-center">云商</th>
+                    <th class="text-center">主机名</th>
+                    <th class="text-center">内网IP</th>
+                    <th class="text-center">外网IP</th>
+                    <th class="text-center">配置</th>
+                    <th class="text-center">业务线</th>
+                    <th class="text-center">产品线</th>
+                    <th class="text-center">状态</th>
+                    <th class="text-center">备注</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                 {% for server in serverlist %}
+                   <tr class="gradeX">
+                      <td class="text-center">{{ server.idc.idc_name }}</td>
+                      <td class="text-center">{{ server.hostname }}</td>
+                      <td class="text-center">{{ server.inner_ip }}</td>
+                      <td class="text-center">{{ server.out_ip }}</td>
+                      <td class="text-center">{{ server.server_conf }} </td>
+                      <td class="text-center">{{ products }}</td>
+                       <td class="text-center">{{ server.server_purpose.service_name }} </td>
+                       <td class="text-center">{{ server.status.name }} </td>
+                       <td class="text-center">{{ server.remark }}</td>
+                      <td class="text-center">
+                        <a href="{% url 'resources:idc_edit' server.id %}" class="btn btn-xs btn-info update"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a class="btn btn-xs btn-danger del" uname="{{ server.hostname }}" data-id="{{ server.id }}"><span class="glyphicon glyphicon-trash"></a>
+                       </td>
+                   </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div><!-- /.table-responsive -->
+
+            <div class="row">
+              <div class="col-sm-6">
+                <!--
+                 <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                    显示 [{{ paginator.count }}] 条数据中的 第 [{{ page_obj.start_index}}] 至 [{{ page_obj.end_index }}] 的数据 
+                 </div>
+                -->
+                显示第{{ page_obj.start_index}} - {{ page_obj.end_index }} 条数据,总共 {{ paginator.count }} 条数据. 
+              </div>
+              {% include 'paginator.html' %}
+            </div><!-- /.paginator -->
+
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+{% endblock %}
+
+{% block js %}
+
+/*删除*/
+$("tbody").on('click','.del',function(){
+   /* if(confirm("是否确认删除？")){ */
+        var that = this;
+        var id = $(this).attr('data-id')
+        var uname = $(this).attr('uname')
+        if(confirm("确认删除主机: "+uname+" ?")){
+        $.ajax({
+            url:"",
+            type: "DELETE",
+            data: {"id":id},
+            datatype: "json",
+            success: function(res){
+                console.log(res)
+                if (res.code ==0){
+                    swal("Good!", res.result, "success")
+                    window.location.reload();
+                }else{
+                    swal("操作失败", res.errmsg, "error")
+                }
+            }
+        })
+
+    }  // end confirm
+     return false
+})
+{% endblock %}
+

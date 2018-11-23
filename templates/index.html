@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+
+    {% block title %}首页{% endblock %}
+
+
+
+    {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    {% endblock %}
+
+
+
+    {% block content %}
+      <!-- Info boxes -->
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-linux"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Linux</span>
+              <span class="info-box-number">{{ all_hosts }}</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-windows"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Windows</span>
+              <span class="info-box-number">0</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+{#            <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>#}
+              <span class="info-box-icon bg-green"><i class="fa fa-sitemap"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Groups</span>
+              <span class="info-box-number">{{ group_total_nums }}</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Users</span>
+              <span class="info-box-number">{{ user_active_nums }}</span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">工单处理情况</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-wrench"></i></button>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                  </ul>
+                </div>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-8">
+
+                  <div class="chart">
+                    <!-- Sales Chart Canvas -->
+                      <div id="order"    style="width: 100%;height:380px; display:inline-block"></div>
+                  </div>
+                  <!-- /.chart-responsive -->
+                </div>
+
+              </div>
+              <!-- /.row -->
+            </div>
+
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+             {%  for  msg   in  order_msg %}
+                    {{ msg }} <br>
+            {% endfor %}
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+   {%  endblock %}
+
+
+
+{% block js %}
+
+function formatTime(date) {
+  var year = date.getFullYear();
+  var month = date.getMonth()+1, month = month < 10 ? '0' + month : month;
+  var day = date.getDate(), day =day < 10 ? '0' + day : day;
+  return year + '-' + month + '-' + day;
+}
+
+
+var now = new Date();  //Wed Jul 05 2017 13:50:11 GMT+0800 (中国标准时间)
+var new_now = formatTime(now)   //"2017-07-05"
+
+
+
+     var  orderChart = echarts.init(document.getElementById('order'));
+
+    var  option = {
+    title: {
+        text: '工单处理情况分析',
+           left:'center',
+    },
+
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'line' // 默认为直线，可选为：'line' | 'shadow'
+        }
+    },
+    legend: {
+            orient:'vertical',
+
+
+        data: ['数据库', 'WEB服务', '计划任务', '配置文件','其他'],
+       left: '10'
+
+    },
+    grid: {
+        left: '15%',
+        right: '1%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        data: ["{{order.date}}", '2018-10-12', '2018-10-13', '2018-10-14', '2018-10-15']
+{#        data: ["{{order.date}}", new_now]#}
+    }],
+    yAxis: [{
+        type: 'value',
+        name: '总(个)',
+        axisLabel: {
+            formatter: '{value}'
+        }
+    }],
+    series: [{
+        name: '数据库',
+        type: 'bar',
+        data: [{{ order.db|safe  }} ]
+    }, {
+        name: 'WEB服务',
+        type: 'bar',
+        data: [{{ order.web|safe  }} ]
+    }, {
+        name: '计划任务',
+        type: 'bar',
+        data: [{{ order.crontab |safe }} ]
+    }, {
+        name: '配置文件',
+        type: 'bar',
+        data: [{{ oorder.conf |safe }} ]
+    },{
+        name: '其他',
+        type: 'bar',
+        data: [{{ order.other |safe }} ]
+
+    }]
+};
+
+ orderChart.setOption(option)
+{% endblock %}

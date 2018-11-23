@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="django" name="Django">
+      <configuration>
+        <option name="rootFolder" value="$MODULE_DIR$" />
+        <option name="settingsModule" value="devops/settings.py" />
+        <option name="manageScript" value="manage.py" />
+        <option name="environment" value="&lt;map/&gt;" />
+        <option name="commandsToSkip" value="" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/apps/dashboard" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/resources" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/work_order" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/utils" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/projects" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/tasks" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/code_release" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/books" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/apps/monitor" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="Remote Python 3.6.5 Vagrant VM at C:/Users/dengh/.vagrant.d/boxes/centos72 (/data/env/devops6/bin/python3.6)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="TemplatesService">
+    <option name="TEMPLATE_CONFIGURATION" value="Django" />
+  </component>
+  <component name="TestRunnerService">
+    <option name="PROJECT_TEST_RUNNER" value="Unittests" />
+  </component>
+</module>

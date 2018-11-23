@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+  {% block title %}添加项目{% endblock %}
+  {% block css %}
+  <style>
+    .form-horizontal .form-group{margin-bottom:10px;width:100%;}
+    .form-horizontal  .form-control{width:86%;}
+    .form-horizontal .control-label{width:75px;}
+  </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">项目管理</li>
+        <li class="active">添加项目</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+            <div class="box-header with-border">
+              <h3 class="box-title">添加项目</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+
+	      <form class="form-horizontal" method="post" action="{% url 'projects:project_add' %}">
+              {% if msg %}
+                <div class="alert alert-success alert-dismissable">
+                    <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                    {{ msg | safe }}
+                </div>
+              {% endif %}
+
+             <div class="form-group"><label class="col-sm-2 control-label" style="width:100px; height:50px">项目路径</label>
+                <div class="col-sm-4"><input type="text" value="http://zabbix.16801.com:8080/" name="url" class="form-control" disabled></div>
+                <div class="col-sm-2">
+                    <select  name="group" class="group-select form-control" required="">
+                        {% for group in all_group %}
+                            <option value="{{ group.name }}" >{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-sm-3"><input type="text" name="name" class="form-control" required=""></div>
+             </div>
+
+
+                <div class="hr-line-dashed"></div>
+                <div class="form-group"><label class="col-sm-2 control-label" style="width:100px; height:50px">项目描述</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control" name ="description" rows="3" placeholder="说明格式"></textarea>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group"><label class="col-sm-2 control-label" style="width:100px; height:50px">可见等级</label>
+                    <div class="col-sm-8">
+                        <div class="radio i-checks">
+                            <label><input type="radio" value="0" name="visibility_level" checked><i class="fa fa-lock fa-fw"></i> <strong>私有</strong> <small>项目必须明确授权给每个用户访问。</small></label>
+                        </div>
+                        <div class="radio i-checks">
+                            <label><input type="radio" value="10" name="visibility_level"><i class="fa fa-shield fa-fw"></i> <strong>内部</strong> <small>项目可以被所有已登录用户克隆。</small></label>
+                        </div>
+                         <div class="radio i-checks">
+                            <label><input type="radio" value="20" name="visibility_level"><i class="fa fa-globe fa-fw"></i> <strong>公开</strong> <small>>项目可以被任何用户克隆。</small></label>
+                        </div>
+                    </div>
+                 </div>
+
+
+                <HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <a class="btn btn-warning" href="{% url 'projects:project_list' %}">返回</a>
+                        <button type="reset" class="btn btn-default">取消</button>
+                        <button  type="submit" class="btn btn-primary">提交</button>
+                    </div>
+                </div>
+    
+        </form>
+
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
+

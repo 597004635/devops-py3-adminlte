@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% load mytags %}
+
+  {% block title %}首页{% endblock %}
+  {% block css %}
+  <style>
+    .form-horizontal .form-group{margin-bottom:10px;width:100%;}
+    .form-horizontal  .form-control{width:86%;}
+    .form-horizontal .control-label{width:75px;}
+  </style>
+
+  {% endblock %}
+
+  {% block breadcrunb %}
+      <h1>
+         Dashboard
+        <small>Version 1.0.0</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+        <li class="active">资源管理</li>
+        <li class="active">IDC管理</li>
+        <li class="active">IDC列表</li>
+      </ol>
+  {% endblock %}
+
+
+
+{% block content %}
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+        <!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">IDC列表</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+
+             <div style="margin-bottom: 10px;height: 30px" class="row">
+                <a href="{% url 'resources:idc_add' %}" style="float: left; margin-left: 1%" class="btn btn-sm btn-primary"> 
+                    <span class="glyphicon glyphicon-plus"></span> IDC添加
+                </a>
+                <form style="float: right;width: 20%;margin-right: 1%">
+                <div  class="input-group">
+               
+                    <input type="text" class="form-control" name="keyword" placeholder="idc名称或简称" value="{% if keyword %} {{ keyword }} {% endif %}"> 
+                    <div class="input-group-btn">
+                       <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                           <span class="glyphicon glyphicon-search"></span>搜索
+                       </button>
+                    </div>
+                </div>
+                </form>
+             </div>
+
+
+            <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th class="text-center">序号</th>
+                    <th class="text-center">简称</th>
+                    <th class="text-center">IDC名称</th>
+                    <th class="text-center">地址</th>
+                    <th class="text-center">电话</th>
+                    <th class="text-center">邮箱</th>
+                    <th class="text-center">联系人</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                 {% for idc in idclist %}
+                   <tr class="gradeX">
+                      <td class="text-center">{{ forloop.counter }}</td>
+                      <td class="text-center">{{ idc.name }}</td>
+                      <td class="text-center">{{ idc.idc_name }} </td>
+                      <td class="text-center">{{ idc.address }}</td>
+                      <td class="text-center">{{ idc.phone }}</td>
+                      <td class="text-center">{{ idc.email }}</td>
+                      <td class="text-center">{{ idc.username }} </td>
+                      <td class="text-center">
+                        <a href="{% url 'resources:idc_edit' idc.id %}" class="btn btn-xs btn-info update"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a class="btn btn-xs btn-danger del" uname="{{ idc.idc_name }}" data-id="{{ idc.id }}"><span class="glyphicon glyphicon-trash"></span></a>
+                       </td>
+                   </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div><!-- /.table-responsive -->
+
+            <div class="row">
+              <div class="col-sm-6">
+                <!--
+                 <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                    显示 [{{ paginator.count }}] 条数据中的 第 [{{ page_obj.start_index}}] 至 [{{ page_obj.end_index }}] 的数据 
+                 </div>
+                -->
+                显示第{{ page_obj.start_index}} - {{ page_obj.end_index }} 条数据,总共 {{ paginator.count }} 条数据. 
+              </div>
+              {% include 'paginator.html' %}
+            </div><!-- /.paginator -->
+
+            </div>
+            <!-- /.box-body -->
+
+        </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+
+{% endblock %}
+
+{% block js %}
+
+/*删除*/
+$("tbody").on('click','.del',function(){
+   /* if(confirm("是否确认删除？")){ */
+        var that = this;
+        var id = $(this).attr('data-id')
+        var uname = $(this).attr('uname')
+        if(confirm("确认删除IDC: "+uname+" ?")){
+        $.ajax({
+            url:"",
+            type: "DELETE",
+            data: {"id":id},
+            datatype: "json",
+            success: function(res){
+                console.log(res)
+                if (res.code ==0){
+                    swal("Good!", res.result, "success")
+                    window.location.reload();
+                }else{
+                    swal("操作失败", res.errmsg, "error")
+                }
+            }
+        })
+
+    }  // end confirm
+     return false
+})
+{% endblock %}
+

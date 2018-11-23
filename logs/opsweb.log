@@ -1,0 +1,106 @@
+[2018-10-12 10:15:02,593] [4460] [140260237825792] [     __init__.py: 109] [ERROR ] user admin add server error:("'name' is an invalid keyword argument for this function",)
+[2018-10-12 10:20:22,021] [4460] [140260237825792] [     __init__.py: 109] [ERROR ] user admin add server error:("'name' is an invalid keyword argument for this function",)
+[2018-10-12 10:22:33,449] [4488] [140045832976128] [     __init__.py: 109] [ERROR ] user admin add server error:("'name' is an invalid keyword argument for this function",)
+[2018-10-12 10:25:28,507] [4488] [140045832976128] [     __init__.py: 109] [ERROR ] user admin add server error:("'name' is an invalid keyword argument for this function",)
+[2018-10-16 15:12:39,866] [7981] [140653195310848] [        views.py: 122] [ERROR ] insert Tasks  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 117, in post
+    exec_result = playbook.run()
+AttributeError: 'ANSRunner' object has no attribute 'run'
+
+[2018-10-16 15:13:10,223] [7981] [140653195310848] [        views.py: 122] [ERROR ] insert Tasks  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 117, in post
+    exec_result = playbook.run()
+AttributeError: 'ANSRunner' object has no attribute 'run'
+
+[2018-10-16 15:19:08,836] [13190] [140407690774272] [        views.py: 122] [ERROR ] insert Tasks  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 117, in post
+    exec_result = playbook.run()
+AttributeError: 'ANSRunner' object has no attribute 'run'
+
+[2018-10-16 15:25:19,746] [13538] [140182867937024] [        views.py: 122] [ERROR ] insert Tasks  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 118, in post
+    task.detail_result = exec_result['detail']
+TypeError: 'NoneType' object is not subscriptable
+
+[2018-10-16 15:30:49,932] [13861] [140544440989440] [        views.py: 123] [ERROR ] insert Tasks  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 119, in post
+    task.detail_result = exec_result['detail']
+TypeError: 'NoneType' object is not subscriptable
+
+[2018-10-16 15:40:57,304] [13861] [140544440989440] [        views.py: 123] [ERROR ] insert Tasks  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 119, in post
+    task.detail_result = exec_result['detail']
+TypeError: 'NoneType' object is not subscriptable
+
+[2018-10-16 16:02:45,058] [15608] [139712132019968] [        views.py: 123] [ERROR ] insert Tasks  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 119, in post
+    task.detail_result = exec_result['detail']
+TypeError: 'NoneType' object is not subscriptable
+
+[2018-10-16 16:05:27,024] [15808] [140392466106112] [        views.py: 124] [ERROR ] insert Tasks  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 120, in post
+    task.detail_result = exec_result['detail']
+TypeError: 'NoneType' object is not subscriptable
+
+[2018-10-16 16:48:06,613] [17593] [139919949895424] [        views.py: 126] [ERROR ] insert Tasks  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 121, in post
+    task.detail_result = exec_result['detail']
+KeyError: 'detail'
+
+[2018-10-16 17:24:45,447] [19821] [140380439598848] [        views.py: 143] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 136, in post
+    task_result.unreachable = simple[record]['unreachable']
+KeyError: 'unreachable'
+
+[2018-10-16 17:32:25,807] [19968] [139722869438208] [        views.py: 144] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 137, in post
+    task_result.unreachable = simple[record]['unreachable']
+KeyError: 'unreachable'
+
+[2018-10-16 17:34:53,334] [19968] [139722869438208] [        views.py: 144] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 137, in post
+    task_result.unreachable = simple[record]['unreachable']
+KeyError: 'unreachable'
+
+[2018-10-16 17:38:49,475] [20600] [140606080804608] [        views.py: 144] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 137, in post
+    task_result.unreachable = simple[record]['unreachable']
+TypeError: string indices must be integers
+
+[2018-10-16 17:42:28,625] [20877] [140655650146048] [        views.py: 144] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 136, in post
+    task_result.unreachable = simple[record]['unreachable']
+TypeError: string indices must be integers
+
+[2018-10-16 17:52:06,507] [20877] [140655650146048] [        views.py: 144] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 136, in post
+    task_result.unreachable = simple[record]['unreachable']
+TypeError: string indices must be integers
+
+[2018-10-16 17:57:01,715] [21755] [140102165251840] [        views.py: 144] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 137, in post
+    task_result.unreachable = simple[record]['unreachable']
+TypeError: string indices must be integers
+
+[2018-10-16 18:03:16,078] [22089] [140310157612800] [        views.py: 146] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 141, in post
+    task_result.ok = simple[record]['ok']
+TypeError: string indices must be integers
+
+[2018-10-16 18:06:24,744] [22312] [140151091099392] [        views.py: 146] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 141, in post
+    task_result.ok = simple[record]['ok']
+TypeError: string indices must be integers
+
+[2018-10-16 18:08:58,597] [22481] [139716911621888] [        views.py: 145] [ERROR ] insert ExecResult  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 140, in post
+    task_result.ok = simple[record]['ok']
+TypeError: string indices must be integers
+
+[2018-10-16 19:58:03,894] [28412] [139652908431104] [        views.py: 126] [ERROR ] insert Tasks  error: Traceback (most recent call last):
+  File "/vagrant/devops_demo/devops6/devops/apps/tasks/views.py", line 118, in post
+    exec_result = json.loads(rbt.get_playbook_result())
+  File "/usr/local/python36/lib/python3.6/json/__init__.py", line 348, in loads
+    'not {!r}'.format(s.__class__.__name__))
+TypeError: the JSON object must be str, bytes or bytearray, not 'dict'
+

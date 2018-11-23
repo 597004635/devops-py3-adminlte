@@ -1,0 +1,54 @@
+<!--查看组成员模态窗-->
+<div class="modal fade" id="group_users_model" aria-hidden="true">
+    <div class="modal-dialog" style="width:40%">
+        <div class="modal-content">
+            <div class="modal-header" style="background:cornflowerblue; color:white">
+                 <i class="fa fa-info-circle"></i>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+{#                <h2>用户组名: <span id="modal_show_group_users_list_title"></span></h2>#}
+                用户组名：<span style="font-weight:bold" id="modal_show_group_users_list_title"></span>
+            </div>
+            <div class="modal-body form-inline" id="modal_show_group_users_content_list">
+            </div>
+
+            <div class="modal-footer">
+                <input class="btn btn-default" data-dismiss="modal" aria-hidden="true" type="button" value="确定">
+            </div>
+        </div>
+    </div>
+</div>
+<!--end modal-->
+
+<!--添加组模态窗-->
+<div class="modal fade" id="add_group_model">
+    <div class="modal-dialog" style="width:40%">
+        <div class="modal-content">
+
+            <div class="modal-header" style="background:cornflowerblue; color:white">
+                <i class="fa fa-info-circle"></i>
+                <span style="font-weight:bold">添加角色</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+
+            <div class="modal-body" style="text-align:center">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" style="width:100px; height:50px"><span style="color:red; margin-left:5px">*</span>角色：</label>
+                          <div class="col-sm-8">
+                              <input type="text" class="form-control" id="form_groupname" placeholder="请输入角色名称" />
+                          </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="create_group_btn">确定</button>
+                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">取消</button>
+                    </div>
+                </form>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+<!--end modal-->

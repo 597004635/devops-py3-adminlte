@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+
+  <title>用户登录</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link href="/static/img/favicon.ico" type="image/x-icon" rel="shortcut icon">
+
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="/static/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/css/AdminLTE.min.css">
+  <!-- my Alert style -->
+  <link rel="stylesheet" href="/static/css/alert/sweet-alert.css">
+
+
+</head>
+
+<body class="hold-transition login-page">
+
+<div class="login-box">
+  <div class="login-logo">
+   <!--  <a href="#"><b>SRE</b></a> -->
+    <img src="/static/img/chujian.png">
+  </div>
+  <!-- /.login-logo -->
+
+  <div class="login-box-body">
+   <!-- <p class="login-box-msg">让技术产生价值</p> -->
+    <p class="login-box-msg"><b>游戏自动化平台</b></p>
+  <!--   <p class="login-box-msg">Sign in to start your seesion</p> -->
+    <form onsubmit="return false;">
+      <div class="form-group has-feedback">
+        <input id="user" type="text" class="form-control" placeholder="用户名">
+        <!--<span class="glyphicon glyphicon-envelope form-control-feedback"></span> -->
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+
+      <div class="form-group has-feedback">
+        <input id="password" type="password" class="form-control" placeholder="密码">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-8">
+            <span id="errors" style="color:red"></span>
+        </div>
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">
+             登录  <span class="glyphicon glyphicon-log-in"></span>
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+    <a id='forget' >忘记密码</a><br>
+
+
+  </div>
+
+</div>
+
+
+
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/css/alert/sweet-alert.min.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
+
+
+<script>
+/* 忘记密码提示*/
+$("#forget").click(function() {
+    /*str="请联系管理员帮您重置密码"+'\n'+"邮箱：admin@16801.com";*/
+    str="请联系管理员帮您重置密码";
+    swal(str)
+});
+
+
+$('button').click(function(){
+    var username = $('#user').val()
+    var password = $('#password').val()
+    $.ajax({
+             type: "POST",
+             url: "/login/",
+             data: {username:username, password:password},
+             dataType: "json",
+             success: function(data){
+                 status = data.code
+                 if (status == 0){
+                  //  $.cookie('__isActiveMenu',null,{ expires:7, path:'/'});
+                    swal("登录成功")
+                    location.href = data['next_url']
+                 } else {
+                   // console.log(data)
+                   // $('#errors').html(data['errmsg'])
+                    swal({
+                        title: data['errmsg'],
+                        type: "error",
+                        confirmButtonText: "知道了"
+                    }, function() {
+                      //  $("#username").val(""),
+                        $("#password").val("")
+                    });
+                 }
+             },
+            //error: function(){
+           // },
+	});
+    return false;
+
+})
+
+</script>
+</body>
+</html>
