@@ -80,6 +80,8 @@
                     <th class="text-center">状态</th>
                     <th class="text-center">备注</th>
                     <th class="text-center">操作</th>
+                    <th class="text-center">开/关服</th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -90,14 +92,34 @@
                       <td class="text-center">{{ server.inner_ip }}</td>
                       <td class="text-center">{{ server.out_ip }}</td>
                       <td class="text-center">{{ server.server_conf }} </td>
-                      <td class="text-center">{{ products }}</td>
+{#                      <td class="text-center">{{ products }}</td>#}
+                       <td class="text-center">{{ server }} </td>
                        <td class="text-center">{{ server.server_purpose.service_name }} </td>
-                       <td class="text-center">{{ server.status.name }} </td>
+                        <td class="status">
+                        {% if server.status_id == 2 %}
+                            <span class="glyphicon glyphicon-ok-circle text-succes"></span>运行中
+                        {% else %}
+                            <span class="glyphicon glyphicon-warning-sign text-warning"></span>已关闭
+                        {% endif %}
+                      </td>
+{#                       <td class="text-center">{{ server.status.name }} </td>#}
                        <td class="text-center">{{ server.remark }}</td>
                       <td class="text-center">
                         <a href="{% url 'resources:idc_edit' server.id %}" class="btn btn-xs btn-info update"><span class="glyphicon glyphicon-edit"></span></a>
                         <a class="btn btn-xs btn-danger del" uname="{{ server.hostname }}" data-id="{{ server.id }}"><span class="glyphicon glyphicon-trash"></a>
+{#                          <button onclick="PostCmd('shell')" class="btn-xs btn-info"><span class="glyphicon glyphicon-play">启动</span></button>#}
+{#                       <a href="#" class="btn btn-xs btn-info start" servername="{{ server.servername }}" data-id="{{ server.id }}"><span class="glyphicon glyphicon-play">启动</span></a>#}
+{#                        <a class="btn btn-xs btn-danger stop_server" gamename="{{ game.gamename }}" data-id="{{ game.id }}"><span class="glyphicon glyphicon-off">关闭</a>#}
                        </td>
+
+                         <td class="text-center">
+                            {% if server.status_id == 2 %}
+                                <button type="button" class="btn btn-xs btn-warning glyphicon glyphicon-off modify_user_status" status={{ user.is_active|lower  }} data="{{ user.id }}">关闭</button>
+                            {% else %}
+                                <button type="button" class="btn btn-xs  btn-info glyphicon glyphicon-play modify_user_status " status={{ user.is_active|lower }} data="{{ user.id }}">启动</button>
+                            {% endif %}
+                       </td>
+
                    </tr>
                 {% endfor %}
                 </tbody>
@@ -156,6 +178,17 @@ $("tbody").on('click','.del',function(){
 
     }  // end confirm
      return false
+
+    /* 服务启动停止开关（开启/关闭）*/
+function change_user_status(status_td_obj, status){
+    if (status == "true"){
+        status_td_obj.html('<span class="glyphicon glyphicon-warning-sign text-warning"></span>已关闭')
+    }else{
+        status_td_obj.html('<span class="glyphicon glyphicon-ok-circle text-success"></span>运行中')
+    }
+}
+
+
 })
 {% endblock %}
 

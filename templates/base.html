@@ -33,6 +33,12 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="/static/css/_all-skins.min.css">
 
+    <!-- FileUpload plugins -->
+  <link href="/static/plugins/dropzone/dropzone.css" rel="stylesheet">
+{#<script src="/static/plugins/dropzone/dropzone.js"></script>#}
+
+
+
   {% block css %}
 
   {% endblock %}
@@ -140,8 +146,7 @@
 	  
 	  
       <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu" data-widget="tree">
-        
+      <ul id="mainnav-menu" class="sidebar-menu" data-widget="tree">
         
         <!-- <li class="header">让技术产生生产力</li> -->
         <li class="header">极致 速度 不妥协</li>
@@ -183,6 +188,39 @@
             <li><a href="{% url 'resources:server_list' %}"><i class="fa fa-circle-o"></i> 主机管理</a></li>#}
           </ul>
         </li>
+
+          <li class="treeview">
+          <a href="#">
+            <i class="fa fa-bicycle"></i>
+            <span>审计管理</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{% url 'audit:host_list' %}"><i class="fa fa-circle-o"></i> 主机管理</a></li>
+            <li><a href="{% url 'audit:audit_log' %}"><i class="fa fa-circle-o"></i> 审计日志</a></li>
+            <li><a href="{% url 'audit:session_log' %}"><i class="fa fa-circle-o"></i> 登录日志</a></li>
+            <li><a href="{% url 'audit:task_log' %}"><i class="fa fa-circle-o"></i> 任务日志</a></li>
+            <li><a href="{% url 'audit:multi_cmd' %}"><i class="fa fa-circle-o"></i> 批量命令</a></li>
+            <li><a href="{% url 'audit:multi_file_transfer' %}"><i class="fa fa-circle-o"></i> 批量文件</a></li>
+          </ul>
+        </li>
+
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-gamepad"></i>
+            <span>游戏管理</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+             <li><a href="{% url 'games:games_server_list' %}"><i class="fa fa-circle-o"></i> 太古神王</a></li>
+          </ul>
+        </li>
+
 
         <li class="treeview">
           <a href="#">
@@ -368,7 +406,16 @@
 <script src="/static/js/date/WdatePicker.js"></script>
 
 
+<!-- FileUpload-plugs -->
+<script src="/static/plugins/dropzone/dropzone.js"></script>
+
+
 <script>
+
+{# $(document).ready(function () {#}
+{#     $("#mainnav-menu a[href='{{ request.path }}']").parent().addClass('active-link');#}
+{# })#}
+
 {% block js %}
 
 {% endblock %}

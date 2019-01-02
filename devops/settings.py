@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'code_release',
     'books',
     'monitor',
+    'audit',
+    'games',
 ]
 
 
@@ -55,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -122,7 +124,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'Asia/Shanghai'
+TIME_ZONE = 'PRC'
+# TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -157,8 +160,6 @@ PAGINATION_SETTINGS = {
     'SHOW_FIRST_PAGE_WHEN_INVALID': True,
 }
 
-
-
 GITLAB_HTTP_URI = "http://zabbix.16801.com:8080/"
 GITLAB_TOKEN = "cvEwD9BCFJiX4T6jAwN2"
 
@@ -178,8 +179,23 @@ ZABBIX_API = "http://211.159.170.73/"
 ZABBIX_USER = "Admin"
 ZABBIX_USERPASS = "ZabBix@16801.Com"
 
+### audit conf ###
+MULTI_TASK_SCRIPT = os.path.join(BASE_DIR, 'apps/audit/multitask.py')
+FILE_UPLOADS = os.path.join(BASE_DIR,'media/uploads')
+FILE_DOWNLOADS = os.path.join(BASE_DIR,'media/downloads')
 
 
+SHELLINABOX = {
+    'host': '127.0.0.1',
+    'port': 9000,
+    'username': 'root',
+    # 'password': '123456'
+}
+
+###audit END ####
+
+
+"""
 LOGGING = {
     "version": 1,
     'disable_existing_loggers': False,
@@ -250,7 +266,7 @@ LOGGING = {
         }
     },
 }
-
+"""
 
 import djcelery
 djcelery.setup_loader()

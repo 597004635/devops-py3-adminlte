@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}批量文件{% endblock %}
+
+{% block breadcrunb %}
+  <h1>
+     Dashboard
+    <small>Version 1.0</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">审计管理</li>
+    <li class="active">批量文件</li>
+  </ol>
+{% endblock %}
+
+
+
+{% block content %}
+
+<!-- Main row -->
+<div class="row">
+<!-- Left col -->
+    <div class="col-md-12">
+
+<!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+            <div class="box-header with-border">
+              <h3 class="box-title">批量管理</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+
+            <div id="page-content">
+                {% include 'audit/components/hostgroups.html' %}
+
+                <div class="col-lg-9">
+                    <div class="panel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">文件传输</h3>
+                    </div>
+                    <div class="panel-body">
+                        <select name="transfer-type" onchange="ToggleUploadEle(this)">
+                            <option value="send">发送文件到远程主机</option>
+                            <option value="get">从远程主机下载文件</option>
+                        </select>
+
+                        <form id="filedropzone" action="{% url 'audit:task_file_upload' %}?random_str={{ random_str }}" class="dropzone dz-clickable">
+                            <div class="dz-default dz-message">
+                                <div class="dz-icon">
+                                    <i class="demo-pli-upload-to-cloud icon-5x"></i>
+                                </div>
+                                <div>
+                                    <span class="dz-text">删除上传的文件</span>
+                                    <p class="text-sm text-muted">或者单击手动选择</p>
+                                </div>
+                            </div>
+                        </form>
+
+{#                        <input type="hidden" value="{{ random_str }}" name="random_str">#}
+                        <input id="remote_path" class="form-control" type="text" placeholder="远程路径">
+
+                        <button onclick="PostTask('file_transfer')" class="btn btn-info pull-right">执行</button>
+                        <button class="btn btn-danger pull-right">终止</button>
+
+                        <a id="file-download-btn" class="btn btn-info hide" href="">下载文件到本地</a>
+                    </div>
+                </div>
+                    {% include 'audit/components/task_result.html' %}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+  <script src="/static/plugins/dropzone/dropzone.js"></script>
+{% block js %}
+    {% include 'audit/components/multitask_js.html' %}
+
+    $(document).ready(function () {
+        //Dropzone.autoDiscover = false;
+        //var myDropzone = new Dropzone("#filedropzone");
+        Dropzone.options.filedropzone  = {
+              paramName: "file", // The name that will be used to transfer the file
+              maxFilesize: 2, // MB
+              maxFiles:2,
+              accept: function(file, done) {
+                if (file.name == "test.jpg") {
+                  done("Naha, you don't.");
+                }
+                else { done(); }
+              }
+        };
+        console.log('ddddd')
+    })
+
+    function  ToggleUploadEle(self) {
+        console.log($(self).val())
+        if ( $(self).val() == 'get'){
+            $(self).next().addClass("hide")
+        }else {
+            $(self).next().removeClass('hide')
+        }
+    }
+{% endblock %}

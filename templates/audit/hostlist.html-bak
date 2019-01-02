@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}主机管理{% endblock %}
+
+
+{% block breadcrunb %}
+  <h1>
+     Dashboard
+    <small>Version 2.0</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li class="active">审计管理</li>
+    <li class="active">主机管理</li>
+  </ol>
+{% endblock %}
+
+
+
+{% block content %}
+
+<!-- Main row -->
+<div class="row">
+<!-- Left col -->
+    <div class="col-md-12">
+
+<!-- TABLE: LATEST ORDERS -->
+        <div class="box box-info">
+
+
+            <div class="box-header with-border">
+              <h3 class="box-title">主机管理</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+
+            <div class="col-lg-3" style="background-color:#F0F8FF;">
+                <div class="panel-heading">
+                    <h3 class="panel-title">主机组</h3>
+                </div>
+                <div class="panel-body">
+                    {% for group in request.user.account.host_groups.all  %}
+                        <li class="list-group-item " onclick="GetHostlist({{ group.id }},this)"><span class="badge badge-success">{{ group.host_user_binds.count }}</span>{{ group.name }}</li>
+                    {% endfor %}
+                        <li class="list-group-item " onclick="GetHostlist(-1,this)"> <span class="badge badge-success">{{ request.user.account.host_user_binds.count }}</span>未分组主机</li>
+
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-9">
+                <div class="panel-heading">
+                    <h3 class="panel-title">主机列表</h3>
+                </div>
+                <div class="panel-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>主机名</th>
+                                    <th>IP</th>
+                                    <th>IDC</th>
+                                    <th>端口</th>
+                                    <th>用户名</th>
+                                    <th>操作</th>
+                                    <th>Token</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hostlist"></tbody>
+                        </table>
+                    </div>
+
+            </div>
+
+            </div>
+
+
+    <!-- /.box-header -->
+
+        <div class="box-body">
+
+         <div style="margin: 10px;height: 30px" class="row">
+
+
+<!-- /.box-body -->
+
+        </div>
+  <!-- /.box -->
+    </div>
+<!-- /.col -->
+</div>
+<!-- /.row -->
+
+
+{% endblock %}
+
+{% block js %}
+
+    // 通过api获取主机列表
+    function GetHostlist(gid,self) {
+        $.get("{% url 'audit:get_host_list' %}",{'gid':gid},function(callback){
+            var data  = JSON.parse(callback);
+            console.log(data)
+            var trs = ''
+            $.each(data,function (index,i) {
+                var tr = "<tr><td>" + i.host__hostname + "</td><td>" + i.host__ip_addr +"</td><td>" + i.host__idc__name
+                        +"</td><td>" + i.host__port  + "</td><td>" + i.host_user__username+ "</td><td><a class='btn btn-info' onclick=GetToken(this,'"+i.id +"')>生成token</a> Login</td><td ></td></tr>";
+                trs += tr
+            })
+            $("#hostlist").html(trs);
+        });//end get
+        $(self).addClass("active").siblings().removeClass('active');
+    }
+
+{#    生成token#}
+    function GetToken(self,bind_host_id) {
+    $.post("{% url 'audit:get_token' %}", {'bind_host_id':bind_host_id,'csrfmiddlewaretoken':"{{ csrf_token }}"}, function (callback) {
+{#    console.log(callback)#}
+        var data = JSON.parse(callback)
+        $(self).parent().next().text(data.token);
+        }); // end post
+    }
+
+{%  endblock %}

@@ -33,4 +33,6 @@ urlpatterns = [
     url('^deploy/', include('code_release.urls', namespace='deploy')),
     url('^books/', include('books.urls', namespace='books')),
     url('^monitor/', include('monitor.urls', namespace='monitor')),
+    url('^audit/', include('audit.urls', namespace='audit')),
+    url('^games/', include('games.urls', namespace='games')),
 ]

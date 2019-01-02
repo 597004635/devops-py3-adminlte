@@ -1,4 +1,5 @@
 from django.db import models
+from dashboard.models import UserProfile
 
 class Idc(models.Model):
     name        = models.CharField("idc 字母简称", max_length=10, default="", unique=True)
@@ -45,14 +46,9 @@ class Server(models.Model):
     create_date     = models.DateField(null=True)
     check_update_time = models.DateTimeField(auto_now=True, null=True)
 
-
     def __str__(self):
         return "{} [{}]".format(self.hostname, self.inner_ip)
 
     class Meta:
         db_table = 'resources_server'
         ordering = ['id']
-
-
-
-
